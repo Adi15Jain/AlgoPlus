@@ -23,7 +23,7 @@ class AlgoRequest(BaseModel):
 def run_algorithm(req: AlgoRequest):
     try:
         # Serialize request JSON
-        input_json = json.dumps(req.dict())
+        input_json = json.dumps(req.model_dump())
 
         # Run C++ engine
         process = subprocess.run(

@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 export default function Home() {
-    const [input, setInput] = useState("5,3,8,1,2");
+    const [input, setInput] = useState("Enter an array");
     const [result, setResult] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
