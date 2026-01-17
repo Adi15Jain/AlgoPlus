@@ -8,7 +8,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -19,7 +19,7 @@ class AlgoRequest(BaseModel):
     algorithm: str
     array: list[int]
 
-@app.post("/run-algorithm")
+@app.post("/sorting-bubblesort")
 def run_algorithm(req: AlgoRequest):
     try:
         # Serialize request JSON
@@ -27,7 +27,7 @@ def run_algorithm(req: AlgoRequest):
 
         # Run C++ engine
         process = subprocess.run(
-            ["../engine/algo_engine"],
+            ["../engine/sorting/bubble"],
             input=input_json,
             text=True,
             capture_output=True,
@@ -43,3 +43,4 @@ def run_algorithm(req: AlgoRequest):
 
     except json.JSONDecodeError:
         raise HTTPException(status_code=500, detail="Invalid JSON from C++")
+
