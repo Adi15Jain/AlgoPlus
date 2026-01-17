@@ -19,7 +19,7 @@ class AlgoRequest(BaseModel):
     algorithm: str
     array: list[int]
 
-@app.post("/sorting-bubblesort")
+@app.post("/sorting")
 def run_algorithm(req: AlgoRequest):
     try:
         # Serialize request JSON
@@ -27,7 +27,7 @@ def run_algorithm(req: AlgoRequest):
 
         # Run C++ engine
         process = subprocess.run(
-            ["../engine/sorting/bubble"],
+            ["../engine/sorting/sorting"],
             input=input_json,
             text=True,
             capture_output=True,
