@@ -1,0 +1,90 @@
+"use client";
+
+import { useState, useCallback } from "react";
+import { Sorting } from "@/lib/api";
+import { Step } from "@/types";
+import { useAnimator } from "@/components/engine/useAnimator";
+import ArrayBars from "@/components/visualizers/ArrayBars";
+
+type Props = {
+    algorithm: string;
+    title: string;
+};
+
+export default function SortingVisualizer({ algorithm, title }: Props) {
+    const [input, setInput] = useState("Enter array");
+    const [steps, setSteps] = useState<Step[]>([]);
+    const [current, setCurrent] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [speed, setSpeed] = useState(500);
+
+    const handleRun = async () => {
+        const array = input
+            .split(",")
+            .map((n) => Number(n.trim()))
+            .filter((n) => !isNaN(n));
+
+        const res = await Sorting(algorithm, array);
+        setSteps(res.steps);
+        setCurrent(0);
+        setIsPlaying(false);
+    };
+
+    const nextStep = useCallback(() => {
+        setCurrent((prev) => (prev < steps.length - 1 ? prev + 1 : prev));
+    }, [steps.length]);
+
+    useAnimator({
+        isPlaying,
+        speed,
+        stepsLength: steps.length,
+        onNext: nextStep,
+    });
+
+    return (
+        <>
+            <h1>{title}</h1>
+
+            {/* Input */}
+            <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                style={{ width: "300px" }}
+            />
+            <button onClick={handleRun} style={{ marginLeft: "1rem" }}>
+                Run
+            </button>
+
+            {steps.length > 0 && (
+                <>
+                    {/* Controls */}
+                    <div style={{ marginTop: "1rem" }}>
+                        <button onClick={() => setIsPlaying(true)}>Play</button>
+                        <button onClick={() => setIsPlaying(false)}>
+                            Pause
+                        </button>
+                        <button onClick={nextStep}>Step</button>
+                        <button onClick={() => setCurrent(0)}>Reset</button>
+                    </div>
+
+                    <div style={{ marginTop: "1rem" }}>
+                        Speed:
+                        <input
+                            type="range"
+                            min="100"
+                            max="1000"
+                            step="100"
+                            value={speed}
+                            onChange={(e) => setSpeed(Number(e.target.value))}
+                        />
+                    </div>
+
+                    {/* Visualization */}
+                    <div className="visualizer">
+                        <ArrayBars step={steps[current]} />
+                    </div>
+                </>
+            )}
+        </>
+    );
+}
