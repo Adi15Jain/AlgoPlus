@@ -1,4 +1,8 @@
-export async function Sorting(algorithm: string, array: number[]) {
+export async function runSorting(
+    algorithm: string,
+    array: number[],
+    target?: number,
+) {
     const res = await fetch("http://127.0.0.1:8000/sorting", {
         method: "POST",
         headers: {
@@ -7,6 +11,7 @@ export async function Sorting(algorithm: string, array: number[]) {
         body: JSON.stringify({
             algorithm,
             array,
+            target,
         }),
     });
 

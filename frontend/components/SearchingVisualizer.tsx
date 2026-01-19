@@ -1,18 +1,20 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { runSorting } from "@/lib/api";
 import { Step } from "@/types";
 import { useAnimator } from "@/components/engine/useAnimator";
-import ArrayBars from "@/components/visualizers/ArrayBars";
+import SearchArray from "@/components/visualizers/SearchArray";
+import { isSortedAscending } from "@/lib/utils";
 
-type Props = {
+export default function SearchingVisualizer({
+    algorithm,
+    title,
+}: {
     algorithm: string;
     title: string;
-};
-
-export default function SortingVisualizer({ algorithm, title }: Props) {
-    const [input, setInput] = useState("Enter array");
+}) {
+    const [input, setInput] = useState("5,3,8,1,2");
+    const [target, setTarget] = useState("3");
     const [steps, setSteps] = useState<Step[]>([]);
     const [current, setCurrent] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -24,7 +26,23 @@ export default function SortingVisualizer({ algorithm, title }: Props) {
             .map((n) => Number(n.trim()))
             .filter((n) => !isNaN(n));
 
-        const res = await runSorting(algorithm, array);
+        if (algorithm === "binary" && !isSortedAscending(array)) {
+            alert(
+                "Binary Search requires a sorted array.\nPlease sort the array first.",
+            );
+            return;
+        }
+
+        const res = await fetch("http://127.0.0.1:8000/searching", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                algorithm,
+                array,
+                target: Number(target),
+            }),
+        }).then((r) => r.json());
+
         setSteps(res.steps);
         setCurrent(0);
         setIsPlaying(false);
@@ -41,23 +59,31 @@ export default function SortingVisualizer({ algorithm, title }: Props) {
         onNext: nextStep,
     });
 
+    const step = steps[current] ?? null;
+
     return (
         <>
             <h1>{title}</h1>
 
-            {/* Input */}
+            {/* Inputs */}
             <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                style={{ width: "300px" }}
+                placeholder="Array"
             />
-            <button onClick={handleRun} style={{ marginLeft: "1rem" }}>
+            <input
+                value={target}
+                onChange={(e) => setTarget(e.target.value)}
+                placeholder="Target"
+                style={{ marginLeft: "0.5rem", width: "80px" }}
+            />
+            <button onClick={handleRun} style={{ marginLeft: "0.5rem" }}>
                 Run
             </button>
 
+            {/* Controls */}
             {steps.length > 0 && (
                 <>
-                    {/* Controls */}
                     <div style={{ marginTop: "1rem" }}>
                         <button onClick={() => setIsPlaying(true)}>Play</button>
                         <button onClick={() => setIsPlaying(false)}>
@@ -81,7 +107,7 @@ export default function SortingVisualizer({ algorithm, title }: Props) {
 
                     {/* Visualization */}
                     <div className="visualizer">
-                        <ArrayBars step={steps[current]} />
+                        <SearchArray step={step} />
                     </div>
                 </>
             )}
