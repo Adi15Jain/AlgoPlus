@@ -102,6 +102,9 @@ export default function Home() {
                 <li>
                     <Link href="/searching">Searching Algorithms</Link>
                 </li>
+                <li>
+                    <Link href="/stacks">Stacks</Link>
+                </li>
             </ul>
         </>
     );

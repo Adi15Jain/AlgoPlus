@@ -13,7 +13,7 @@ export default function SearchingVisualizer({
     algorithm: string;
     title: string;
 }) {
-    const [input, setInput] = useState("5,3,8,1,2");
+    const [input, setInput] = useState("Enter sorted array");
     const [target, setTarget] = useState("3");
     const [steps, setSteps] = useState<Step[]>([]);
     const [current, setCurrent] = useState(0);

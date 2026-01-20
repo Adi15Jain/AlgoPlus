@@ -138,6 +138,13 @@ vector<Step> binarySearch(const vector<int>& arr, int target) {
     return steps;
 }
 
+bool isSorted(const vector<int>& arr) {
+    for (int i = 1; i < arr.size(); i++) {
+        if (arr[i] < arr[i - 1]) return false;
+    }
+    return true;
+}
+
 /* =========================
    SEARCH DISPATCHER
    ========================= */
@@ -151,9 +158,13 @@ vector<Step> runSearching(
     }
 
     if (algorithm == "binary") {
+        if (!isSorted(arr)) {
+            return {
+                {"not_found", -1, -1, arr}
+            };
+        }
         return binarySearch(arr, target);
     }
-
     return {};
 }
 
