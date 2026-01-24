@@ -9,7 +9,10 @@ export type Step = {
         | "push"
         | "pop"
         | "peek"
-        | "error";
+        | "error"
+        | "enqueue"
+        | "dequeue"
+        | "front";
     i: number;
     j: number;
     array: number[];
