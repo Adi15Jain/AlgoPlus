@@ -26,6 +26,11 @@ class SearchRequest(BaseModel):
 class StackRequest(BaseModel):
     operation: str     
     value: int | None = None 
+class QueueRequest(BaseModel):
+    operation: str           
+    value: int | None = None  
+
+QUEUE_STATE: list[int] = []
 
 
 @app.post("/sorting")
@@ -114,3 +119,42 @@ def run_stack(req: StackRequest):
 
     except Exception as e:
         raise HTTPException(500, str(e))
+
+@app.post("/queue")
+def run_queue(req: QueueRequest):
+    global QUEUE_STATE
+
+    try:
+        payload: dict[str, Any] = {
+            "operation": req.operation,
+            "queue": QUEUE_STATE
+        }
+
+        if req.operation == "enqueue":
+            if req.value is None:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Value required for enqueue operation"
+                )
+            payload["value"] = req.value
+
+        process = subprocess.run(
+            ["../engine/queues/queue"],
+            input=json.dumps(payload),
+            text=True,
+            capture_output=True,
+            check=True
+        )
+
+        result = json.loads(process.stdout)
+
+        # Update backend queue state
+        QUEUE_STATE = result["steps"][-1]["array"]
+
+        return result
+
+    except subprocess.CalledProcessError:
+        raise HTTPException(status_code=500, detail="C++ queue engine error")
+
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Invalid JSON from queue engine")
