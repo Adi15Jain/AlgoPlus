@@ -9,16 +9,26 @@ import { isSortedAscending } from "@/lib/utils";
 export default function SearchingVisualizer({
     algorithm,
     title,
+    arrayOverride,
+    targetOverride,
 }: {
     algorithm: string;
     title: string;
+    arrayOverride?: number[];
+    targetOverride?: number;
+    onComplete?: () => void;
 }) {
-    const [input, setInput] = useState("Enter sorted array");
-    const [target, setTarget] = useState("3");
+    const [input, setInput] = useState(
+        arrayOverride ? arrayOverride.join(",") : "5,3,8,1,2",
+    );
+    const [target, setTarget] = useState(
+        targetOverride !== undefined ? String(targetOverride) : "3",
+    );
     const [steps, setSteps] = useState<Step[]>([]);
     const [current, setCurrent] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const [speed, setSpeed] = useState(500);
+    const isGuided = arrayOverride !== undefined;
 
     const handleRun = async () => {
         const array = input
@@ -70,12 +80,14 @@ export default function SearchingVisualizer({
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Array"
+                disabled={isGuided}
             />
             <input
                 value={target}
                 onChange={(e) => setTarget(e.target.value)}
                 placeholder="Target"
                 style={{ marginLeft: "0.5rem", width: "80px" }}
+                disabled={isGuided}
             />
             <button onClick={handleRun} style={{ marginLeft: "0.5rem" }}>
                 Run

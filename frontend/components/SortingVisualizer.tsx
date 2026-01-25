@@ -9,10 +9,16 @@ import ArrayBars from "@/components/visualizers/ArrayBars";
 type Props = {
     algorithm: string;
     title: string;
+    inputOverride?: string;
+    onComplete?: (result: number[]) => void;
 };
 
-export default function SortingVisualizer({ algorithm, title }: Props) {
-    const [input, setInput] = useState("Enter array");
+export default function SortingVisualizer({
+    algorithm,
+    title,
+    inputOverride,
+}: Props) {
+    const [input, setInput] = useState(inputOverride ?? "5,3,8,1,2");
     const [steps, setSteps] = useState<Step[]>([]);
     const [current, setCurrent] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);

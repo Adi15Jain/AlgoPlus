@@ -20,6 +20,11 @@ export default function Home() {
                 <li>
                     <Link href="/queue">Queues</Link>
                 </li>
+                <li>
+                    <Link href="/learn/binarySearchRequiresSorting">
+                        Guided Lesson: Why Binary Search Needs Sorting
+                    </Link>
+                </li>
             </ul>
         </>
     );
