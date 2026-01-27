@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import subprocess
 import json
-from typing import Any
+from typing import Any, List, Optional
 
 app = FastAPI()
 
@@ -29,8 +29,12 @@ class StackRequest(BaseModel):
 class QueueRequest(BaseModel):
     operation: str           
     value: int | None = None  
-
-QUEUE_STATE: list[int] = []
+class TreeRequest(BaseModel):
+    operation: str                 # build | traversal | search
+    build_type: Optional[str] = None
+    algorithm: Optional[str] = None
+    values: Optional[List[str]] = None
+    target: Optional[int] = None
 
 
 @app.post("/sorting")
@@ -120,6 +124,9 @@ def run_stack(req: StackRequest):
     except Exception as e:
         raise HTTPException(500, str(e))
 
+
+QUEUE_STATE: list[int] = []
+
 @app.post("/queue")
 def run_queue(req: QueueRequest):
     global QUEUE_STATE
@@ -158,3 +165,72 @@ def run_queue(req: QueueRequest):
 
     except json.JSONDecodeError:
         raise HTTPException(status_code=500, detail="Invalid JSON from queue engine")
+
+TREE_STATE: list[str] = []
+
+@app.post("/tree")
+def run_tree(req: TreeRequest):
+    global TREE_STATE
+
+    try:
+        payload: dict = {
+            "operation": req.operation
+        }
+
+        # BUILD
+        if req.operation == "build":
+            if not req.build_type or not req.values:
+                raise HTTPException(
+                    status_code=400,
+                    detail="build_type and values required for build"
+                )
+
+            payload["build_type"] = req.build_type
+            payload["values"] = req.values
+
+        # TRAVERSAL
+        elif req.operation == "traversal":
+            if not req.algorithm:
+                raise HTTPException(
+                    status_code=400,
+                    detail="algorithm required for traversal"
+                )
+
+            payload["algorithm"] = req.algorithm
+            payload["values"] = TREE_STATE
+
+        # SEARCH
+        elif req.operation == "search":
+            if req.target is None:
+                raise HTTPException(
+                    status_code=400,
+                    detail="target required for search"
+                )
+
+            payload["target"] = req.target
+            payload["values"] = TREE_STATE
+
+        else:
+            raise HTTPException(status_code=400, detail="Invalid tree operation")
+
+        process = subprocess.run(
+            ["../engine/trees/tree"],
+            input=json.dumps(payload),
+            text=True,
+            capture_output=True,
+            check=True
+        )
+
+        result = json.loads(process.stdout)
+
+        # Update tree state after build
+        if req.operation == "build":
+            TREE_STATE = result["steps"][0]["tree"]
+
+        return result
+
+    except subprocess.CalledProcessError:
+        raise HTTPException(status_code=500, detail="Tree engine error")
+
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Invalid JSON from tree engine")

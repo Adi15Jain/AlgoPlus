@@ -22,8 +22,11 @@ export default function Home() {
                 </li>
                 <li>
                     <Link href="/learn/binarySearchRequiresSorting">
-                        Guided Lesson: Why Binary Search Needs Sorting
+                        Guided Lesson: Why Binary Search Needs Sorting?
                     </Link>
+                </li>
+                <li>
+                    <Link href="/trees">Trees</Link>
                 </li>
             </ul>
         </>
