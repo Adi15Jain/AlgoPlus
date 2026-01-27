@@ -180,8 +180,10 @@ int main() {
             tree = values;
         } else if (type == "bst") {
             tree.clear();
-            for (auto& v : values)
+            for (auto& v : values) {
+                if (v == "null") continue;
                 bstInsert(tree, stoi(v), 0);
+            }
         }
 
         steps.push_back({"build", -1, -1, tree});
