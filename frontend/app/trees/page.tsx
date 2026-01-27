@@ -4,7 +4,6 @@ export default function TreeHome() {
     return (
         <div style={{ padding: "2rem" }}>
             <h1>Trees</h1>
-            <p>Build a tree and visualize traversals or searching.</p>
 
             <ul style={{ marginTop: "1rem" }}>
                 <li>

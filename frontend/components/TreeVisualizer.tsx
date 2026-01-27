@@ -1,5 +1,6 @@
 import TreeNode from "./tree/TreeNode";
 import TreeEdge from "./tree/TreeEdge";
+import React from "react";
 
 type Step = {
     op: string;
@@ -48,8 +49,8 @@ export default function TreeVisualizer({ step }: Props) {
                     const rightIdx = 2 * n.idx + 2;
 
                     return (
-                        <>
-                            {nodes.find((c) => c.idx === leftIdx) && (
+                        <React.Fragment key={n.idx}>
+                            {nodes.find((c) => c.idx === 2 * n.idx + 1) && (
                                 <TreeEdge
                                     x1={n.x}
                                     y1={n.y}
@@ -57,7 +58,7 @@ export default function TreeVisualizer({ step }: Props) {
                                     y2={nodes.find((c) => c.idx === leftIdx)!.y}
                                 />
                             )}
-                            {nodes.find((c) => c.idx === rightIdx) && (
+                            {nodes.find((c) => c.idx === 2 * n.idx + 2) && (
                                 <TreeEdge
                                     x1={n.x}
                                     y1={n.y}
@@ -69,7 +70,7 @@ export default function TreeVisualizer({ step }: Props) {
                                     }
                                 />
                             )}
-                        </>
+                        </React.Fragment>
                     );
                 })}
             </svg>

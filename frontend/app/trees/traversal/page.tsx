@@ -12,7 +12,7 @@ export default function TreeTraversalPage() {
     const [current, setCurrent] = useState(0);
 
     const buildTree = async () => {
-        await fetch("http://127.0.0.1:8000/tree", {
+        const res = await fetch("http://127.0.0.1:8000/tree", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -21,6 +21,10 @@ export default function TreeTraversalPage() {
                 values: values.split(",").map((v) => v.trim()),
             }),
         });
+        const data = await res.json();
+
+        setSteps(data.steps);
+        setCurrent(0);
     };
 
     const runTraversal = async (algo: string) => {
@@ -58,12 +62,14 @@ export default function TreeTraversalPage() {
             <button onClick={buildTree}>Build Tree</button>
 
             <div style={{ marginTop: "1rem" }}>
-                <button onClick={() => runTraversal("inorder")}>Inorder</button>
+                <button onClick={() => runTraversal("inorder")}>
+                    In Order
+                </button>
                 <button onClick={() => runTraversal("preorder")}>
-                    Preorder
+                    Pre Order
                 </button>
                 <button onClick={() => runTraversal("postorder")}>
-                    Postorder
+                    Post Order
                 </button>
                 <button onClick={() => runTraversal("levelorder")}>
                     Level Order

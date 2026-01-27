@@ -190,6 +190,12 @@ def run_tree(req: TreeRequest):
 
         # TRAVERSAL
         elif req.operation == "traversal":
+            if not TREE_STATE:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Tree not built yet"
+        )
+        elif req.operation == "traversal":
             if not req.algorithm:
                 raise HTTPException(
                     status_code=400,
@@ -200,6 +206,12 @@ def run_tree(req: TreeRequest):
             payload["values"] = TREE_STATE
 
         # SEARCH
+        elif req.operation == "traversal":
+            if not TREE_STATE:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Tree not built yet"
+                )
         elif req.operation == "search":
             if req.target is None:
                 raise HTTPException(
