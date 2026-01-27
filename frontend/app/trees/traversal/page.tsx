@@ -36,7 +36,15 @@ export default function TreeTraversalPage() {
                 algorithm: algo,
             }),
         });
+
+        if (!res.ok) {
+            console.error("Traversal failed");
+            return;
+        }
+
         const data = await res.json();
+        if (!data.steps) return;
+
         setSteps(data.steps);
         setCurrent(0);
     };
@@ -76,7 +84,7 @@ export default function TreeTraversalPage() {
                 </button>
             </div>
 
-            {steps.length > 0 && <TreeVisualizer step={steps[current]} />}
+            {steps?.length > 0 && <TreeVisualizer step={steps[current]} />}
         </div>
     );
 }

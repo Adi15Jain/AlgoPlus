@@ -4,7 +4,6 @@ import { useState, useCallback } from "react";
 import { Step } from "@/types";
 import { useAnimator } from "@/components/engine/useAnimator";
 import SearchArray from "@/components/visualizers/SearchArray";
-import { isSortedAscending } from "@/lib/utils";
 
 export default function SearchingVisualizer({
     algorithm,
@@ -29,6 +28,13 @@ export default function SearchingVisualizer({
     const [isPlaying, setIsPlaying] = useState(false);
     const [speed, setSpeed] = useState(500);
     const isGuided = arrayOverride !== undefined;
+
+    function isSortedAscending(arr: number[]) {
+        for (let i = 1; i < arr.length; i++) {
+            if (arr[i] < arr[i - 1]) return false;
+        }
+        return true;
+    }
 
     const handleRun = async () => {
         const array = input

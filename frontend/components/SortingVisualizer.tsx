@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { runSorting } from "@/lib/api";
 import { Step } from "@/types";
 import { useAnimator } from "@/components/engine/useAnimator";
 import ArrayBars from "@/components/visualizers/ArrayBars";
@@ -23,6 +22,30 @@ export default function SortingVisualizer({
     const [current, setCurrent] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const [speed, setSpeed] = useState(500);
+
+    async function runSorting(
+        algorithm: string,
+        array: number[],
+        target?: number,
+    ) {
+        const res = await fetch("http://127.0.0.1:8000/sorting", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                algorithm,
+                array,
+                target,
+            }),
+        });
+
+        if (!res.ok) {
+            throw new Error("Backend request failed");
+        }
+
+        return res.json();
+    }
 
     const handleRun = async () => {
         const array = input
