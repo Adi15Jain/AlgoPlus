@@ -17,3 +17,10 @@ export type Step = {
     j: number;
     array: number[];
 };
+
+export type AnimatorProps = {
+    isPlaying: boolean;
+    speed: number;
+    stepsLength: number;
+    onNext: () => void;
+};

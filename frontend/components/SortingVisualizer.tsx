@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Step } from "@/types";
-import { useAnimator } from "@/components/engine/useAnimator";
+import { useAnimator } from "@/lib/utils";
 import ArrayBars from "@/components/visualizers/ArrayBars";
 
 type Props = {

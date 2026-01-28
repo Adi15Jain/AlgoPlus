@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Step } from "@/types";
-import { useAnimator } from "@/components/engine/useAnimator";
+import { useAnimator } from "@/lib/utils";
 import SearchArray from "@/components/visualizers/SearchArray";
 
 export default function SearchingVisualizer({
