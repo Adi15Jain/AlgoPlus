@@ -2,13 +2,7 @@
 
 import { useState } from "react";
 import TreeVisualizer from "../../../components/TreeVisualizer";
-
-type Step = {
-    op: string;
-    i: number;
-    j: number;
-    tree: string[];
-};
+import { Step } from "@/types";
 
 export default function TreeSearchPage() {
     const [values, setValues] = useState("1,2,3,4,5,null,6");

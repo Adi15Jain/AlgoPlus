@@ -3,8 +3,7 @@
 import { useState } from "react";
 import SortingVisualizer from "@/components/SortingVisualizer";
 import SearchingVisualizer from "@/components/SearchingVisualizer";
-
-type Phase = "input" | "explain" | "sorting" | "searching" | "done";
+import { Phase } from "@/types";
 
 export default function BinarySearchLearningFlow() {
     const [phase, setPhase] = useState<Phase>("input");

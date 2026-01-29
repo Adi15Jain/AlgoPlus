@@ -3,6 +3,7 @@
 import { useState } from "react";
 import StackView from "@/components/visualizers/StackView";
 import { Step } from "@/types";
+import { Payload } from "@/types";
 
 export default function StackPage() {
     const [value, setValue] = useState("");
@@ -12,10 +13,6 @@ export default function StackPage() {
     const runOperation = async (operation: "push" | "pop" | "peek") => {
         setError("");
 
-        interface Payload {
-            operation: "push" | "pop" | "peek";
-            value?: number;
-        }
         const payload: Payload = { operation };
         if (operation === "push") {
             if (value.trim() === "") {

@@ -1,8 +1,4 @@
-import { Step } from "@/types";
-
-type Props = {
-    step: Step | null;
-};
+import { Props } from "@/types";
 
 export default function SearchArray({ step }: Props) {
     if (!step) return null;

@@ -12,10 +12,20 @@ export type Step = {
         | "error"
         | "enqueue"
         | "dequeue"
-        | "front";
+        | "front"
+        | string;
     i: number;
     j: number;
     array: number[];
+    tree: string[];
+};
+
+export type Props = {
+    key?: number;
+    value: string;
+    x: number;
+    y: number;
+    highlight?: boolean;
 };
 
 export type AnimatorProps = {
@@ -24,3 +34,10 @@ export type AnimatorProps = {
     stepsLength: number;
     onNext: () => void;
 };
+
+export type Phase = "input" | "explain" | "sorting" | "searching" | "done";
+
+interface Payload {
+    operation: "push" | "pop" | "peek";
+    value?: number;
+}

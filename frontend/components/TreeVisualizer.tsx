@@ -79,6 +79,7 @@ export default function TreeVisualizer({ step }: Props) {
             {nodes.map((n) => (
                 <TreeNode
                     key={n.idx}
+                    // step={step}
                     value={n.value}
                     x={n.x}
                     y={n.y}

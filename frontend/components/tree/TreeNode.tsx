@@ -1,13 +1,9 @@
-type Props = {
-    value: string;
-    x: number;
-    y: number;
-    highlight?: boolean;
-};
+import { Props } from "@/types";
 
-export default function TreeNode({ value, x, y, highlight }: Props) {
+export default function TreeNode({ key, value, x, y, highlight }: Props) {
     return (
         <div
+            key={key}
             style={{
                 position: "absolute",
                 left: x,
